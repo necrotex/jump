@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class RouteController extends Controller
 {
@@ -56,8 +57,29 @@ class RouteController extends Controller
         return $reachable;
     }
 
-    public function lightyearRange($start = "GE-8JV", $range = 5){
+    public function lightyearRange($start = "GE-8JV", $range = 8){
         $start = System::where('solarSystemName', $start)->first();
+
+        $systems = DB::connection('eve')->select(
+            DB::raw('
+                SELECT  a.solarSystemID as source, 
+                        b.solarSystemID as destination, 
+                        ((SQRT((POW((a.x - b.x),2)) + (POW((a.y - b.y),2)) + (POW((a.z - b.z),2)))/149597870691)/63239.6717) as distance
+                        
+                FROM test1.mapSolarSystems a 
+                CROSS JOIN test1.mapSolarSystems b
+                where (a.solarSystemID < 31000001 and b.solarSystemID < 31000001)
+                AND (a.security < 5 and b.security < 5)
+                AND a.solarSystemID = :source #source system
+                HAVING distance <= :range; #ly distance
+            '),
+            [
+                'source' => $start->solarSystemID,
+                'range' => $range
+            ]
+        );
+
+        return $systems;
     }
 
 }
