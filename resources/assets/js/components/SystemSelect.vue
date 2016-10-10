@@ -2,19 +2,17 @@
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
                 <div class="panel panel-default">
-                    <div class="panel-heading">System</div>
+                    <div class="panel-heading">
+                        System
+
+                        <div class="pull-right">
+                            <a href="#" data-toggle="tooltip" data-placement="top" title="Use my current location"><i class="material-icons">my_location</i></a>
+                        </div>
+
+                    </div>
 
                     <div class="panel-body system-select">
-                        <select2 :options="options" v-model="selected">
-                            <v-select
-                                    :debounce="250"
-                                    :on-search="getOptions"
-                                    :options="options"
-                                    placeholder="Enter a System"
-                                    label="full_name"
-                            >
-                            </v-select>
-                        </select2>
+                        <select type="text" class="form-control" id="system" v-model="system" placeholder="System"></select>
                     </div>
                 </div>
             </div>
@@ -22,34 +20,43 @@
 
 </template>
 
-<script type="text/x-template" id="select2-template">
-    <select>
-        <slot></slot>
-    </select>
-</script>
-
 <script>
-    import vSelect from "vue-select"
+    require('select2');
 
     export default {
-        components: {vSelect},
-
-        data() {
-            return {
-                options: null
+        data(){
+            return{
+                system: ''
             }
         },
 
-        methods: {
-            getOptions(search, loading) {
-                loading(true);
-                this.$http.get('/api/systems/autocomplete', {
-                    q: search
-                }).then(resp => {
-                    this.options = resp.data.items;
-                    loading(false)
-                })
-            }
-        }
+      mounted() {
+          console.log('system module loaded');
+
+          $('[data-toggle="tooltip"]').tooltip();
+
+          $("#system").select2({
+              minimumInputLength: 2,
+              ajax: {
+                  url: '/api/systems/autocomplete',
+                  dataType: 'json',
+                  placeholder: 'Enter a System',
+                  delay: 250,
+                  processResults: function (data) {
+                      return {
+                          results: $.map(data, function (item) {
+                              return {
+                                  text: item.solarSystemName,
+                                  slug: item.solarSystemID,
+                                  id: item.solarSystemID
+                              }
+                          })
+                      };
+                  }
+              }
+          });
+
+
+      }
     }
 </script>

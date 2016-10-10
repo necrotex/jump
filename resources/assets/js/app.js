@@ -15,6 +15,8 @@ require('./bootstrap');
  */
 
 Vue.component('system-select', require('./components/SystemSelect.vue'));
+Vue.component('gate-range', require('./components/gate-range.vue'));
+Vue.component('jump-range', require('./components/blops-range.vue'));
 
 const app = new Vue({
     el: '.content',
