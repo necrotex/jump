@@ -22,7 +22,9 @@ class AuthController extends Controller
     public function login()
     {
         try {
-            return Socialite::driver('eveonline')->redirect();
+            return Socialite::driver('eveonline')
+                ->scopes(['characterLocationRead', 'characterNavigationWrite'])
+                ->redirect();
         } catch (Exception $e) {
             return redirect('/login');
         }
@@ -51,8 +53,7 @@ class AuthController extends Controller
         // Check if user exists
         $user = User::firstOrNew(['character_id' => $character->id]);
 
-        // And then update th
-        //e data in case something changed
+        // And then update the data in case something changed
         $user->corporation_id = $character->corporation->id;
         $user->corporation_name = $character->corporation->name;
         $user->name = $character->name;
