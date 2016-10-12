@@ -42,25 +42,25 @@ class RouteController extends Controller
         });
     }
 
-    public function range($start = "GE-8JV", $range = 5)
+    public function range($start, $range = 5)
     {
-        $start = System::where('solarSystemName', $start)->first();
+        $start = System::where('solarSystemID', $start)->first();
         $alg = new BreadthFirst($this->nodes[$start->solarSystemID]);
 
         $reachable = [];
         foreach($alg->getDistanceMap() as $id => $distance) {
             if($distance > $range) continue;
 
-            $reachable[][$id] = ['system' => System::find($id), 'distance' => $distance];
+            $reachable[] = ['system' => System::find($id), 'distance' => $distance];
         }
 
         return $reachable;
     }
 
     public function lightyearRange($start = "GE-8JV", $range = 8){
-        $start = System::where('solarSystemName', $start)->first();
+        $start = System::where('solarSystemID', $start)->first();
 
-        $systems = DB::connection('eve')->select(
+        $results = DB::connection('eve')->select(
             DB::raw('
                 SELECT  a.solarSystemID as source, 
                         b.solarSystemID as destination, 
@@ -78,6 +78,14 @@ class RouteController extends Controller
                 'range' => $range
             ]
         );
+
+        $systems = [];
+        foreach($results as $system){
+            $sys = System::where('solarSystemID', $system->destination)->first();
+            $dist = round($system->distance, 2) . ' ly';
+
+            $systems[] = ['system' => $sys, 'distance' => $dist];
+        }
 
         return $systems;
     }

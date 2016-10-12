@@ -19,6 +19,13 @@
     </div>
 </div>
 
+<script>
+    window.Laravel = <?php echo json_encode([
+            'csrfToken' => csrf_token(),
+            'auth' => Auth::check()
+    ]); ?>
+</script>
+
 <script src="{{ elixir('js/app.js') }}"></script>
 
 </body>

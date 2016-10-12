@@ -14,3 +14,4 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/systems/autocomplete', ['as' => 'api.systems.autocomplete', 'uses' => 'Api\SystemController@autocomplete']);
+Route::post('/systems/range', ['as' => 'api.systems.autocomplete', 'uses' => 'Api\SystemController@systemsInRange']);

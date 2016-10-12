@@ -9,3 +9,32 @@
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 @import "node_modules/select2/src/scss/core";
+@import "node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min";
+
+#search {
+  display:block;
+}
+
+.system-table {
+  width:100%;
+}
+
+.action-icon {
+  font-size:20px;
+  opacity: 0.7;
+
+  &:hover {
+    opacity: 1;
+    cursor: pointer;
+  }
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s
+}
+.fade-enter, .fade-leave-active {
+  opacity: 0
+}
+
+.flip-list-move {
+  transition: transform 1s;
+}
