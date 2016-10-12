@@ -34,13 +34,24 @@ class SystemController extends Controller
 
         $output = [];
         foreach($systems as $index => $system) {
+
+            $history = $npc_kills = $system['system']->killData()->orderBy('created_at', 'desc')->limit(2)->get();
+
+            if($history->isEmpty()){
+                $delta = 0;
+                $kills = 0;
+            } else {
+                $delta = $history->first()->kills_last_hour - $history->last()->kills_last_hour;
+                $kills = $history->first()->kills_last_hour;
+            }
+
             $output[$index]['id'] = $system['system']->solarSystemID;
             $output[$index]['name'] = $system['system']->solarSystemName;
             $output[$index]['sec'] = round($system['system']->security, 2);
             $output[$index]['region'] = $system['system']->region->regionName;
             $output[$index]['distance'] = $system['distance'];
-            $output[$index]['delta'] = 0;
-            $output[$index]['kills'] = 0;
+            $output[$index]['delta'] = $delta;
+            $output[$index]['kills'] = $kills;
         }
 
         return response()->json($output);

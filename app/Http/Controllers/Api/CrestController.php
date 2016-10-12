@@ -2,38 +2,40 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\System;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Socialite\Facades\Socialite;
 
 class CrestController extends Controller
 {
-    protected $httpClient;
 
     public function __construct()
     {
-        $this->middleware(function ($request, $next) {
-            $this->httpClient = new Client([
-                'base_uri' => 'https://crest-tq.eveonline.com/',
-                'headers' => [
-                    'Authorization' => 'Bearer ' . Auth::user()->getAccessToken()
-                ]
-            ]);
+    }
 
-            return $next($request);
-        });
+    protected function getHttpClient()
+    {
+        return new Client([
+            'base_uri' => 'https://crest-tq.eveonline.com/',
+            'headers' => [
+                'Authorization' => 'Bearer ' . Auth::user()->getAccessToken()
+            ]
+        ]);
     }
 
     public function getLocation(Request $requests)
     {
-
         $uri =  '/characters/' . Auth::user()->character_id . '/location/';
-        $response = $this->httpClient->get($uri);
-        dd($response->getBody()->getContents());
+        $response = $this->getHttpClient()->get($uri);
+        $data = json_decode($response->getBody()->getContents());
+
+        $system = System::where('solarSystemID', $data->solarSystem->id)->first();
+
+        return response()->json(['systemID' => $system->solarSystemID, 'systemName' => $system->solarSystemName]);
     }
 
     public function setWaypoint(Request $request)
@@ -48,7 +50,6 @@ class CrestController extends Controller
             ]
         ];
 
-        $response = $this->httpClient->post($uri, ['json' => $payload]);
-        dd($response->getBody()->getContents());
+        $response = $this->getHttpClient()->post($uri, ['json' => $payload]);
     }
 }

@@ -9,7 +9,7 @@
                     System
 
                     <div class="pull-right">
-                        <location v-if="auth"></location>
+                        <location v-if="auth" v-on:update="updateSystems"></location>
                     </div>
 
                 </div>

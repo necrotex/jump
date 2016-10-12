@@ -18,4 +18,8 @@ class System extends Model
     public function jumps(){
         return $this->hasMany('App\Models\Jump', 'fromSolarSystemID', 'solarSystemID');
     }
+
+    public function killData(){
+        return $this->hasMany('App\Models\KillData', 'system_id', 'solarSystemID');
+    }
 }

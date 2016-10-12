@@ -42,7 +42,7 @@ class RouteController extends Controller
         });
     }
 
-    public function range($start, $range = 5)
+    public function range($start, $range)
     {
         $start = System::where('solarSystemID', $start)->first();
         $alg = new BreadthFirst($this->nodes[$start->solarSystemID]);
@@ -57,7 +57,7 @@ class RouteController extends Controller
         return $reachable;
     }
 
-    public function lightyearRange($start = "GE-8JV", $range = 8){
+    public function lightyearRange($start, $range){
         $start = System::where('solarSystemID', $start)->first();
 
         $results = DB::connection('eve')->select(
@@ -66,13 +66,12 @@ class RouteController extends Controller
                         b.solarSystemID as destination, 
                         ((SQRT((POW((a.x - b.x),2)) + (POW((a.y - b.y),2)) + (POW((a.z - b.z),2)))/149597870691)/63239.6717) as distance
                         
-                FROM test1.mapSolarSystems a 
-                CROSS JOIN test1.mapSolarSystems b
+                FROM mapSolarSystems a 
+                CROSS JOIN mapSolarSystems b
                 where (a.solarSystemID < 31000001 and b.solarSystemID < 31000001)
                 AND (a.security < 0.5 and b.security < 0.5)
                 AND a.solarSystemID = :source #source system
-                HAVING distance <= :range; #ly distance
-            '),
+                HAVING distance <= :range; #ly distance'),
             [
                 'source' => $start->solarSystemID,
                 'range' => $range

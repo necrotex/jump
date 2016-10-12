@@ -21,7 +21,7 @@
                         {{entry[key]}}
                     </td>
                     <td>
-                        <i class="material-icons action-icon" title="Add waypoint" v-if="auth">add_location</i>
+                        <i class="material-icons action-icon" title="Add waypoint" v-if="auth" v-on:click="addWaypoint(entry['id'])">add_location</i>
                         <i class="material-icons action-icon" title="Open dotlan" v-on:click="openDotlan(entry['name'])">map</i>
                         <i class="material-icons action-icon" title="Open zkillboard" v-on:click="openZkill(entry['id'])">change_history</i>
                     </td>
@@ -41,11 +41,12 @@
             var columns = ['name', 'sec', 'region', 'distance', 'delta', 'kills'];
 
             columns.forEach((key) => {
-                sortOrders[key] = 1;
+                sortOrders[key] = -1;
             });
 
+
             return {
-                sortKey: '',
+                sortKey: 'delta',
                 systems: {},
                 columns: columns,
                 search: '',
@@ -113,6 +114,7 @@
                     vm.systems = response.body;
                     vm.loaded = true;
                 });
+
             },
 
             openDotlan: function(system){
@@ -121,6 +123,10 @@
 
             openZkill: function(system){
                 window.open("https://zkillboard.com/system/" + system, '_blank');
+            },
+
+            addWaypoint: function(systemID){
+                this.$http.post('/api/crest/waypoint', {'systemID': systemID});
             }
         },
 
