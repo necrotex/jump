@@ -38,7 +38,7 @@
         replace: true,
         data(){
             var sortOrders = {};
-            var columns = ['name', 'region', 'distance', 'delta', 'kills'];
+            var columns = ['name', 'sec', 'region', 'distance', 'delta', 'kills'];
 
             columns.forEach((key) => {
                 sortOrders[key] = 1;

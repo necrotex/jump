@@ -102,7 +102,7 @@ const app = new Vue({
 
     watch: {
         systemName: function(val){
-            window.location.hash = val;
+            history.pushState(null, null, '#' + val);
         }
     }
 

@@ -14,7 +14,7 @@ class SystemController extends Controller
     public function autocomplete(Request $request)
     {
         $systems = System::where('solarSystemName', 'LIKE', "{$request->input('q')}%")
-            ->where('security', '<', 5)
+            ->where('security', '<', 0.5)
             ->where('solarSystemID', '<', 31000001)
             ->get();
 
@@ -36,6 +36,7 @@ class SystemController extends Controller
         foreach($systems as $index => $system) {
             $output[$index]['id'] = $system['system']->solarSystemID;
             $output[$index]['name'] = $system['system']->solarSystemName;
+            $output[$index]['sec'] = round($system['system']->security, 2);
             $output[$index]['region'] = $system['system']->region->regionName;
             $output[$index]['distance'] = $system['distance'];
             $output[$index]['delta'] = 0;

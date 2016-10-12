@@ -69,7 +69,7 @@ class RouteController extends Controller
                 FROM test1.mapSolarSystems a 
                 CROSS JOIN test1.mapSolarSystems b
                 where (a.solarSystemID < 31000001 and b.solarSystemID < 31000001)
-                AND (a.security < 5 and b.security < 5)
+                AND (a.security < 0.5 and b.security < 0.5)
                 AND a.solarSystemID = :source #source system
                 HAVING distance <= :range; #ly distance
             '),

@@ -13,7 +13,8 @@
 
             return {
                 system: 0,
-                select: null
+                select: null,
+                notFound: false
             }
         },
 
@@ -43,9 +44,9 @@
                             }
                         }
                     })
-                    .on('select2:select', function (name, value) {
-                        vm.$emit('update', vm.select.val(), vm.select.text());
-                        vm.system = vm.select.val();
+                    .on('select2:select', function (e) {
+                        vm.$emit('update', e.params.data.id, e.params.data.text);
+                        vm.system = e.params.data.id;
                     });
         },
 
@@ -54,10 +55,19 @@
                 var vm = this;
                 if(value != null) {
                     this.$http.get('/api/systems/autocomplete?q=' + value).then((response) => {
+
+                        vm.notFound = false;
+                        if(response.body.length == 0) {
+                            vm.notFound = true;
+                            return;
+                        }
+
                         var option = new Option(response.body[0].solarSystemName, response.body[0].solarSystemID);
                         $(this.$el).append(option);
+
                         vm.select.val(response.body[0].solarSystemID).trigger('change');
                         vm.system = response.body[0].solarSystemID;
+
                         vm.$emit('update', vm.system, response.body[0].solarSystemName);
                     });
                 }
