@@ -8,7 +8,6 @@
 require('./bootstrap');
 require('bootstrap-switch');
 
-
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the body of the page. From here, you may begin adding components to
@@ -19,6 +18,7 @@ Vue.component('system-select', require('./components/SystemSelect.vue'));
 Vue.component('grid', require('./components/grid.vue'));
 Vue.component('location', require('./components/MyLocation.vue'));
 Vue.component('range-select', require('./components/range-select.vue'));
+Vue.component('ring-loader', require('vue-spinner/src/RingLoader.vue'));
 
 const app = new Vue({
     el: '.content',

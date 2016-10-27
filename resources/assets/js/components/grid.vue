@@ -1,35 +1,42 @@
 <template>
-    <transition name="fade">
-        <div v-show="loaded">
-            <form id="search" class="pull-right">
-                Search <input name="query" v-model="search" class="form-control">
-            </form>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th v-for="key in columns"
-                        @click="sortBy(key)"
-                        :class="{ active: sortKey == key }">
-                        {{ key }}
-                    </th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="entry in filteredData">
-                    <td v-for="key in columns">
-                        {{entry[key]}}
-                    </td>
-                    <td>
-                        <i class="material-icons action-icon" title="Add waypoint" v-if="auth" v-on:click="addWaypoint(entry['id'])">add_location</i>
-                        <i class="material-icons action-icon" title="Open dotlan" v-on:click="openDotlan(entry['name'])">map</i>
-                        <i class="material-icons action-icon" title="Open zkillboard" v-on:click="openZkill(entry['id'])">change_history</i>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </transition>
+    <div>
+        <ring-loader :loading="loading" :color="color" :size="size" class="loader"></ring-loader>
+
+        <transition name="fade">
+            <div v-show="loaded">
+                <form id="search" class="pull-right">
+                    Search <input name="query" v-model="search" class="form-control">
+                </form>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th v-for="key in columns"
+                            @click="sortBy(key)"
+                            :class="{ active: sortKey == key }">
+                            {{ key }}
+                        </th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="entry in filteredData">
+                        <td v-for="key in columns">
+                            {{entry[key]}}
+                        </td>
+                        <td>
+                            <i class="material-icons action-icon" title="Add waypoint" v-if="auth"
+                               v-on:click="addWaypoint(entry['id'])">add_location</i>
+                            <i class="material-icons action-icon" title="Open dotlan"
+                               v-on:click="openDotlan(entry['name'])">map</i>
+                            <i class="material-icons action-icon" title="Open zkillboard"
+                               v-on:click="openZkill(entry['id'])">change_history</i>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </transition>
+    </div>
 </template>
 
 <script>
@@ -44,7 +51,6 @@
                 sortOrders[key] = -1;
             });
 
-
             return {
                 sortKey: 'delta',
                 systems: {},
@@ -52,7 +58,10 @@
                 search: '',
                 sortOrders: sortOrders,
                 auth: window.Laravel.auth,
-                loaded: false
+                loaded: false,
+                loading: true,
+                color: "#ddd",
+                size: "50px"
             }
         },
 
@@ -72,7 +81,7 @@
                 }
 
                 if (sortKey) {
-                    data = data.slice().sort(function (a, b) {
+                    data = data.sort(function (a, b) {
                         a = a[sortKey];
                         b = b[sortKey];
                         return (a === b ? 0 : a > b ? 1 : -1) * order
@@ -103,6 +112,7 @@
             update: function () {
                 var vm = this;
                 vm.loaded = false;
+                vm.loading = true;
 
                 var body = {
                     range: this.range,
@@ -113,6 +123,7 @@
                 this.$http.post('/api/systems/range/', body).then((response) => {
                     vm.systems = response.body;
                     vm.loaded = true;
+                    vm.loading = false;
                 });
 
             },
@@ -140,4 +151,5 @@
             }
         }
     }
+
 </script>
