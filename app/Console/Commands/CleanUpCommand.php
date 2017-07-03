@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\KillData;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class CleanUpCommand extends Command
 {
@@ -42,7 +43,7 @@ class CleanUpCommand extends Command
         $expired = Carbon::now()->subWeek(2);
 
         Log::info("Removing old history data");
-        KillData::where('created_at', '>=', $expired)->delete();
+        KillData::where('created_at', '<=', $expired)->delete();
         Log::info('Done');
     }
 }
