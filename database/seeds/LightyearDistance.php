@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class LightyearDistance extends Seeder
 {
@@ -11,31 +12,19 @@ class LightyearDistance extends Seeder
      */
     public function run()
     {
-        $systems = \App\Models\System::where('security', '<', 5)->where('solarSystemID', '<', 31000001)->get();
+        DB::SELECT("
+              Insert into jump.distances (fromSolarSystemID, toSolarSystemID, distance)  
+              ( 
+                  SELECT a.solarSystemID as source, b.solarSystemID as destination,  
+                  ((SQRT((POW((a.x - b.x),2)) + (POW((a.y - b.y),2)) + (POW((a.z - b.z),2)))/149597870691)/63239.6717) as distance
+                  
+                  FROM eve_sde.mapSolarSystems as a 
+                  CROSS JOIN eve_sde.mapSolarSystems as b 
+                  where (a.solarSystemID < 31000001 and b.solarSystemID < 31000001 and a.solarSystemID != b.solarSystemID) 
+                  AND (a.security < 0.5 and b.security < 0.5) 
+              );
+       ");
 
-        $done = [];
-
-        foreach ($systems as $system) {
-
-            $done[] = $system->solarSystemID;
-
-            foreach ($systems as $ksystem) {
-                if ($system->solarSystemID == $ksystem->solarSystemID || in_array($ksystem->solarSystemID, $done))
-                    continue;
-
-                $range = (((sqrt(
-                            (($system->x - $ksystem->x) * ($system->x - $ksystem->x)) +
-                            (($system->y - $ksystem->y) * ($system->y - $ksystem->y)) +
-                            (($system->z - $ksystem->z) * ($system->z - $ksystem->z))))
-                        / 149597870691) / 63239.6717);
-
-
-                DB::table('distances')->insert([
-                    'fromSolarSystemID' => $system->solarSystemID,
-                    'toSolarSystemID' => $ksystem->solarSystemID,
-                    'range' => $range
-                ]);
-            }
-        }
+        DB::SELECT("ALTER TABLE `distances` ADD INDEX `start_distance` (`fromSolarSystemID`, `distance`)");
     }
 }

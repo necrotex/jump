@@ -16,7 +16,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         UpdateKillDataCommand::class,
-        CleanUpCommand::class
+        CleanUpCommand::class,
     ];
 
     /**
@@ -27,8 +27,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('jump:update')->hourly();
-        $schedule->command('jump:clean')->hourly();
+
+        $schedule->command('jump:clean')->hourly()->after(function (){
+            $this->call('jump:update');
+        });
     }
 
     /**

@@ -52,7 +52,7 @@
             });
 
             return {
-                sortKey: 'delta',
+                sortKey: false,
                 systems: {},
                 columns: columns,
                 search: '',
@@ -89,12 +89,6 @@
                 }
 
                 return data;
-            },
-
-            filters: {
-                capitalize: function(str){
-                    return str.charAt(0).toUpperCase() + str.slice(1);
-                }
             }
         },
 
@@ -124,6 +118,8 @@
                     vm.systems = response.body;
                     vm.loaded = true;
                     vm.loading = false;
+
+                    vm.sortKey = 'delta';
                 });
 
             },
