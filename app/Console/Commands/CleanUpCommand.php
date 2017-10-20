@@ -40,7 +40,7 @@ class CleanUpCommand extends Command
      */
     public function handle()
     {
-        $expired = Carbon::now()->subWeek(2);
+        $expired = Carbon::now()->subWeek(1);
 
         Log::info("Removing old history data");
         KillData::where('created_at', '<=', $expired)->delete();
