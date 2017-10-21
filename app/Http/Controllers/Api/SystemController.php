@@ -11,6 +11,30 @@ use App\Http\Controllers\Controller;
 
 class SystemController extends Controller
 {
+    public function info($id)
+    {
+        $system = System::find($id);
+        $history = $npc_kills = $system->killData()->orderBy('created_at', 'desc')->limit(2)->get();
+
+        if($history->isEmpty()){
+            $delta = 0;
+            $kills = 0;
+        } else {
+            $delta = $history->first()->kills_last_hour - $history->last()->kills_last_hour;
+            $kills = $history->first()->kills_last_hour;
+        }
+
+        $output = [];
+        $output['id'] = $system->solarSystemID;
+        $output['name'] = $system->solarSystemName;
+        $output['sec'] = round($system->security, 2);
+        $output['region'] = $system->region->regionName;
+        $output['delta'] = $delta;
+        $output['kills'] = $kills;
+
+        return response()->json($output);
+    }
+
     public function autocomplete(Request $request)
     {
         $systems = System::where('solarSystemName', 'LIKE', "{$request->input('q')}%")

@@ -1,37 +1,28 @@
+$whiteColor: #fff;
+$blackColor: #000;
+$lightBlackColor: #333;
+$grayColor: #ccc;
+$weightGrayColor: #999;
+$lightGrayColor: #eee;
+$lightColor: #f9f9f9;
 
-// Body
-$body-bg: #f5f8fa;
+/*font color*/
+$fontColor: #555;
 
-// Borders
-$laravel-border-color: darken($body-bg, 10%);
-$list-group-border: $laravel-border-color;
-$navbar-default-border: $laravel-border-color;
-$panel-default-border: $laravel-border-color;
-$panel-inner-border: $laravel-border-color;
+/*theme color*/
+$primaryColor: #2c68ca;
+$primaryColorhover: #39b2a9;
+$hoverColor:rgba(65, 202, 192, 0.05);
 
-// Brands
-$brand-primary: #3097D1;
-$brand-info: #8eb4cb;
-$brand-success: #2ab27b;
-$brand-warning: #cbb956;
-$brand-danger:  #bf5329;
+/*extend color*/
+$successColor: #19d567;
+$successColorhover: #30d073;
 
-// Typography
-$font-family-sans-serif: "Raleway", sans-serif;
-$font-size-base: 14px;
-$line-height-base: 1.6;
-$text-color: #636b6f;
+$infoColor: #2db7f5;
+$infoColorhover: #43bcf3;
 
-// Navbar
-$navbar-default-bg: #fff;
+$dangerColor: #f50;
+$dangerColorhover: #f9702b;
 
-// Buttons
-$btn-default-color: $text-color;
-
-// Inputs
-$input-border: lighten($text-color, 40%);
-$input-border-focus: lighten($brand-primary, 25%);
-$input-color-placeholder: lighten($text-color, 30%);
-
-// Panels
-$panel-default-heading-bg: #fff;
+$warningColor: #fa0;
+$warningColorhover: #f5b73b;

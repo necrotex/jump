@@ -12,6 +12,7 @@
 */
 
 Route::get('/', ['as' => 'home', 'uses' => 'HomeController@index']);
+Route::get('/region/{region}', ['as' => 'region', 'uses' => 'HomeController@region']);
 
 Route::get('/login', ['as' => 'auth.login', 'uses' => 'AuthController@login']);
 Route::get('/sso/callback', ['as' => 'auth.callback', 'uses' => 'AuthController@callback']);

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class KillData extends Model
 {
+    protected $connection = "mysql";
     protected $table = 'kill_data';
 
     protected $fillable = [
