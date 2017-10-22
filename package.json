@@ -13,6 +13,7 @@
         "N3-components": "^2.4.2",
         "axios": "^0.16.2",
         "bootstrap-sass": "^3.3.7",
+        "chart.js": "^2.7.0",
         "color-functions": "^1.1.0",
         "cross-env": "^5.0.1",
         "jquery": "^3.1.1",
@@ -20,6 +21,7 @@
         "lodash": "^4.17.4",
         "raphael": "^2.2.7",
         "vue": "^2.1.10",
+        "vue-chartjs": "^3.0.0",
         "vue-context-menu": "^2.0.6",
         "vue-localstorage": "^0.5.0"
     }

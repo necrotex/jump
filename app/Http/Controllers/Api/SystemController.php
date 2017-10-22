@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\RouteController;
 use App\Models\System;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -31,6 +32,22 @@ class SystemController extends Controller
         $output['region'] = $system->region->regionName;
         $output['delta'] = $delta;
         $output['kills'] = $kills;
+
+        return response()->json($output);
+    }
+
+    public function history($id)
+    {
+        $system = System::find($id);
+
+        $entries = $system->killData()->where('created_at', '>=', Carbon::now()->subDays(2))->get();
+
+        $output = [];
+        foreach($entries as $entry) {
+            $data['label'] = Carbon::parse($entry->created_at)->diffInHours() . 'h';
+            $data['data']   = $entry->kills_last_hour;
+            $output[] = $data;
+        }
 
         return response()->json($output);
     }

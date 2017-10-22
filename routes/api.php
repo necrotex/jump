@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 Route::get('/systems/autocomplete', ['as' => 'api.systems.autocomplete', 'uses' => 'Api\SystemController@autocomplete']);
 Route::post('/systems/range', ['as' => 'api.systems.range', 'uses' => 'Api\SystemController@systemsInRange']);
 Route::get('/system/{id}', ['as' => 'api.systems.info', 'uses' => 'Api\SystemController@info']);
+Route::get('/system/{id}/history', ['as' => 'api.systems.info', 'uses' => 'Api\SystemController@history']);
 
 Route::get('/crest/location', ['as' => 'api.crest.location', 'uses' => 'Api\CrestController@getLocation']);
 Route::post('/crest/waypoint', ['as' => 'api.crest.waypoint', 'uses' => 'Api\CrestController@setWaypoint']);

@@ -12,6 +12,8 @@
         <p>Kills in the last hour: {{data.kills}}</p>
         <p>Kill delta: {{data.delta}}</p>
 
+        <history-chart :system="data.id" css-classes="chart"></history-chart>
+
         <div class="action-buttons">
             <n3-button type="primary" size="lg" class="center-block">Set Waypoint</n3-button>
         </div>
@@ -22,6 +24,7 @@
     import {EventBus} from '../EventBus';
 
     export default {
+
         mounted() {
             EventBus.$on('open-info-panel', (data) => {
                 this.open(data.id);
@@ -30,10 +33,8 @@
 
         methods: {
             open(id) {
-
                 axios.get('api/system/' + id)
                     .then((response) => {
-                        console.log(response);
                         this.data = response.data;
                         this.$refs.asideLeft.open()
                     });
@@ -44,6 +45,10 @@
         data() {
             return {
                 data: {},
+                history: {
+                    data: {},
+                    labels: {}
+                }
             }
         },
 

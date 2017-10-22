@@ -8,7 +8,10 @@
 </template>
 
 <script>
+    import {EventBus} from '../EventBus';
+
     export default {
+
         mounted() {
             EventBus.$on('open-context-menu', (x, y) => {
                 this.open(x, y);
